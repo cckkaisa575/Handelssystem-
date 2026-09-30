@@ -1,0 +1,16 @@
+# Installation: sudo cp deploy/hlbot.service /etc/systemd/system/ && sudo systemctl enable --now hlbot
+# Pfade und Benutzer anpassen.
+[Unit]
+Description=Hyperliquid Trendfolge-Bot
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=hlbot
+WorkingDirectory=/opt/Handelssystem-
+ExecStart=/opt/Handelssystem-/.venv/bin/python -m hlbot run --yes
+Restart=always
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target

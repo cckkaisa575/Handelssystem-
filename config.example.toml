@@ -1,0 +1,41 @@
+# Konfiguration des Hyperliquid-Trendfolge-Bots.
+# Kopieren nach config.toml und anpassen:  cp config.example.toml config.toml
+
+[general]
+# "paper"   = Simulation mit echten Live-Kursen, kein Geld im Spiel (Standard)
+# "testnet" = echte Orders auf dem Hyperliquid-Testnet (Test-USDC)
+# "live"    = echtes Geld auf dem Hyperliquid-Mainnet
+mode = "paper"
+start_capital = 100.0          # nur für Paper-Modus und Backtests
+state_dir = "state"
+log_dir = "logs"
+
+[market]
+coins = ["BTC", "ETH", "SOL", "HYPE"]
+interval = "1h"                # Kerzen-Intervall (1h empfohlen)
+history_bars = 600             # wie viele Kerzen für die Indikatoren geladen werden
+
+[strategy]
+trend_ema = 200                # Trendfilter: Long nur über, Short nur unter dieser EMA
+breakout_len = 48              # Donchian-Ausbruch: Hoch/Tief der letzten N Kerzen
+atr_len = 14
+adx_len = 14
+adx_min = 20.0                 # Mindest-Trendstärke für Einstiege
+stop_atr_mult = 2.5            # Anfangs-Stop = Einstieg -/+ k * ATR
+trail_atr_mult = 3.5           # Chandelier-Trailing-Stop
+allow_shorts = true
+
+[risk]
+risk_per_trade = 0.02          # 2 % des Kontos Risiko pro Trade (Abstand bis Stop)
+max_positions = 3
+max_leverage_per_position = 2.0   # Nominalwert je Position max. 2x Kontostand
+max_total_leverage = 4.0          # Summe aller Positionen max. 4x Kontostand
+exchange_leverage = 5             # Hebel-Einstellung auf der Börse (Margin-Puffer, cross)
+min_order_notional = 11.0         # Hyperliquid-Minimum ist 10 USD
+daily_loss_limit = 0.08           # Pause bis zum nächsten UTC-Tag bei -8 % am Tag
+max_drawdown = 0.35               # Not-Aus bei -35 % vom Höchststand (manuell zurücksetzen)
+
+[costs]
+taker_fee = 0.00045            # Hyperliquid-Perp-Taker-Gebühr (Basisstufe)
+slippage = 0.0005              # angenommene Slippage je Ausführung (Backtest/Paper)
+funding_per_hour = 0.0000125   # pessimistisch: 0.00125 %/h Funding auf jede Position (Backtest)
